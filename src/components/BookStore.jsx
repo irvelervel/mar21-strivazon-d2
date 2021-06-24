@@ -25,18 +25,26 @@ class BookStore extends Component {
   render() {
     return (
       <Row>
-        <Col md={4}>
-          <BookList
-            bookSelected={this.state.bookSelected}
-            changeBook={this.changeBook}
-            books={this.props.books.stock}
-          />
-        </Col>
-        <Col md={8}>
-          <BookDetail
-            bookSelected={this.state.bookSelected}
-          />
-        </Col>
+        {
+          this.props.books.loading ? <p>LOADING...</p> :
+            <>
+              <Col md={4}>
+                <BookList
+                  bookSelected={this.state.bookSelected}
+                  changeBook={this.changeBook}
+                  books={this.props.books.stock}
+                />
+              </Col>
+              <Col md={8}>
+                <BookDetail
+                  bookSelected={this.state.bookSelected}
+                />
+              </Col>
+            </>
+        }
+        {
+          this.props.books.error && <p>AWW SNAP, WE GOT AN ERROR!</p>
+        }
       </Row>
     );
   }

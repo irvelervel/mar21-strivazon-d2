@@ -15,7 +15,11 @@ export const getBooksAction = () => {
     // this function can handle async operations (like a fetch) or conditionally dispatch the action,
     // delay the dispatching of an action, do complex data manipulation
     try {
-      let resp = await fetch('https://striveschool-api.herokuapp.com/food-books')
+      dispatch({
+        type: 'SET_LOADING',
+        payload: true,
+      })
+      let resp = await fetch('https://striveschool-api.herokuapp.com/food-booksssss')
       console.log(getState())
       if (resp.ok) {
         let books = await resp.json()
@@ -23,11 +27,35 @@ export const getBooksAction = () => {
           type: 'GET_BOOKS',
           payload: books,
         })
+        dispatch({
+          type: 'SET_LOADING',
+          payload: false,
+        })
+        dispatch({
+          type: 'SET_ERROR',
+          payload: false,
+        })
       } else {
         console.log('error')
+        dispatch({
+          type: 'SET_LOADING',
+          payload: false,
+        })
+        dispatch({
+          type: 'SET_ERROR',
+          payload: true,
+        })
       }
     } catch (error) {
       console.log(error)
+      dispatch({
+        type: 'SET_LOADING',
+        payload: false,
+      })
+      dispatch({
+        type: 'SET_ERROR',
+        payload: true,
+      })
     }
   }
 }
