@@ -9,8 +9,26 @@
 // the action with the array of books as the payload
 
 export const getBooksAction = () => {
-  return async () => {
+  return async (dispatch, getState) => {
+    // dispatch here is coming thanks to redux-thunk
     // fetch the books here!
+    // this function can handle async operations (like a fetch) or conditionally dispatch the action,
+    // delay the dispatching of an action, do complex data manipulation
+    try {
+      let resp = await fetch('https://striveschool-api.herokuapp.com/food-books')
+      console.log(getState())
+      if (resp.ok) {
+        let books = await resp.json()
+        dispatch({
+          type: 'GET_BOOKS',
+          payload: books,
+        })
+      } else {
+        console.log('error')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
