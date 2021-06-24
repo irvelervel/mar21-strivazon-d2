@@ -19,7 +19,7 @@ export const getBooksAction = () => {
         type: 'SET_LOADING',
         payload: true,
       })
-      let resp = await fetch('https://striveschool-api.herokuapp.com/food-booksssss')
+      let resp = await fetch('https://striveschool-api.herokuapp.com/food-books')
       console.log(getState())
       if (resp.ok) {
         let books = await resp.json()
