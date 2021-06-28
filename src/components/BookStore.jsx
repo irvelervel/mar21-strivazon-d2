@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import BookList from "./BookList";
 import BookDetail from "./BookDetail";
 import { Col, Row } from "react-bootstrap";
@@ -11,43 +11,43 @@ const mapDispatchToProps = (dispatch) => ({
   getBooks: () => dispatch(getBooksAction())
 })
 
-class BookStore extends Component {
-  state = {
-    bookSelected: null,
-  };
+const BookStore = ({ getBooks, books }) => {
 
-  componentDidMount = () => {
-    this.props.getBooks()
-  };
+  const [bookSelected, setBookSelected] = useState(null)
 
-  changeBook = (book) => this.setState({ bookSelected: book });
+  useEffect(() => {
+    getBooks()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  render() {
-    return (
-      <Row>
-        {
-          this.props.books.loading ? <p>LOADING...</p> :
-            <>
-              <Col md={4}>
-                <BookList
-                  bookSelected={this.state.bookSelected}
-                  changeBook={this.changeBook}
-                  books={this.props.books.stock}
-                />
-              </Col>
-              <Col md={8}>
-                <BookDetail
-                  bookSelected={this.state.bookSelected}
-                />
-              </Col>
-            </>
-        }
-        {
-          this.props.books.error && <p>AWW SNAP, WE GOT AN ERROR!</p>
-        }
-      </Row>
-    );
-  }
+  // componentDidMount = () => {
+  //   this.props.getBooks()
+  // };
+
+  return (
+    <Row>
+      {
+        books.loading ? <p>LOADING...</p> :
+          <>
+            <Col md={4}>
+              <BookList
+                bookSelected={bookSelected}
+                changeBook={(book) => setBookSelected(book)}
+                books={books.stock}
+              />
+            </Col>
+            <Col md={8}>
+              <BookDetail
+                bookSelected={bookSelected}
+              />
+            </Col>
+          </>
+      }
+      {
+        books.error && <p>AWW SNAP, WE GOT AN ERROR!</p>
+      }
+    </Row>
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookStore);

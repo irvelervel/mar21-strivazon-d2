@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { useState } from 'react';
 import Button from "react-bootstrap/Button";
 import { withRouter } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
@@ -26,45 +26,41 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setUsername: (name) => {
+  setReduxUsername: (name) => {
     dispatch(setUsernameAction(name))
   }
 })
 
-class CartIndicator extends Component {
+const CartIndicator = ({ cart, history, user, setReduxUsername }) => {
 
-  state = {
-    username: ''
-  }
+  const [username, setUsername] = useState('')
 
-  render() {
-    return (
-      <div className="ml-auto mt-2">
-        {
-          this.props.user.firstName ?
-            <Button color="primary" onClick={() => this.props.history.push("/cart")}>
-              <span>Welcome, {this.props.user.firstName}!</span>
-              <FaShoppingCart className="ml-2" />
-              <span className="ml-2">{this.props.cart.products.length}</span>
-            </Button>
-            :
-            <FormControl
-              type="text"
-              placeholder="your name?"
-              value={this.state.username}
-              onChange={(e) => {
-                this.setState({ username: e.target.value })
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  // dispatch the action!
-                  this.props.setUsername(this.state.username)
-                }
-              }}
-            />
-        }
-      </div>)
-  }
+  return (
+    <div className="ml-auto mt-2">
+      {
+        user.firstName ?
+          <Button color="primary" onClick={() => history.push("/cart")}>
+            <span>Welcome, {user.firstName}!</span>
+            <FaShoppingCart className="ml-2" />
+            <span className="ml-2">{cart.products.length}</span>
+          </Button>
+          :
+          <FormControl
+            type="text"
+            placeholder="your name?"
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value)
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                // dispatch the action!
+                setReduxUsername(username)
+              }
+            }}
+          />
+      }
+    </div>)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CartIndicator));
